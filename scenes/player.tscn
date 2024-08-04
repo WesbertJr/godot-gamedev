@@ -1,7 +1,12 @@
-[gd_scene load_steps=30 format=3 uid="uid://bdf12fs0a8rmw"]
+[gd_scene load_steps=35 format=3 uid="uid://bdf12fs0a8rmw"]
 
 [ext_resource type="Texture2D" uid="uid://k42vh1qs8ekr" path="res://assets/sprites/knight.png" id="1_6u1xs"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_mfj77"]
+[ext_resource type="AudioStream" uid="uid://c222igkhd8gea" path="res://assets/sounds/jump.wav" id="3_ymve8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jhhyb"]
+atlas = ExtResource("1_6u1xs")
+region = Rect2(64, 192, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f1a8n"]
 atlas = ExtResource("1_6u1xs")
@@ -107,6 +112,14 @@ region = Rect2(224, 96, 32, 32)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_jhhyb")
+}],
+"loop": true,
+"name": &"damage",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_f1a8n")
 }, {
 "duration": 1.0,
@@ -199,6 +212,43 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_w61wv"]
 radius = 5.0
 
+[sub_resource type="Animation" id="Animation_w434w"]
+resource_name = "jump"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:playing")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_56c3x"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:playing")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vu43b"]
+_data = {
+"RESET": SubResource("Animation_56c3x"),
+"jump": SubResource("Animation_w434w")
+}
+
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 3
 script = ExtResource("1_mfj77")
@@ -207,9 +257,19 @@ script = ExtResource("1_mfj77")
 z_index = 5
 position = Vector2(-1, -12)
 sprite_frames = SubResource("SpriteFrames_ppg21")
-animation = &"jump"
+animation = &"damage"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, -5)
 shape = SubResource("CircleShape2D_w61wv")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+root_node = NodePath("jump")
+libraries = {
+"": SubResource("AnimationLibrary_vu43b")
+}
+
+[node name="jump" type="AudioStreamPlayer2D" parent="AnimationPlayer"]
+stream = ExtResource("3_ymve8")
