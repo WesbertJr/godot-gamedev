@@ -102,3 +102,5 @@
 .godot/shader_cache/SpecularMergeShaderRD/e3bf4029219fc28e239d130af41ed259779b995a7ca276ce11eb905d8ea8a57b/087916079fba7c625e62b0c2cca570e0fb87c99a.cache
 .godot/shader_cache/TonemapShaderRD/5a0afbb891b2e887948e0eb15232663943e30c50d7e1832d520a984332f1782c/087916079fba7c625e62b0c2cca570e0fb87c99a.cache
 .godot/uid_cache.bin
+*.cfg
+*.Node
